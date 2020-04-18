@@ -5,8 +5,7 @@ from bs4 import BeautifulSoup
 app = Flask(__name__)
 
 def coronavirus_cases():
-    url = 'https://www.worldometers.info/coronavirus/'
-    res = requests.get(url)
+    res = requests.get('https://www.worldometers.info/coronavirus/')
     html_page = res.content
     soup = BeautifulSoup(html_page, 'html.parser')
     text = soup.find_all(text=True)
