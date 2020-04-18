@@ -1,10 +1,16 @@
 from flask import Flask, render_template
 import requests
 from bs4 import BeautifulSoup
+import threading
 
 app = Flask(__name__)
+global info
 
 def coronavirus_cases():
+    try:
+        threading.Timer(5.0, coronavirus_cases).start()
+    except: 
+        pass
     res = requests.get('https://www.worldometers.info/coronavirus/')
     html_page = res.content
     soup = BeautifulSoup(html_page, 'html.parser')
@@ -53,9 +59,11 @@ def coronavirus_cases():
 
     return {"cases":cases, "deaths":deaths}
 
+info = coronavirus_cases()
+
 @app.route("/")
 def index():
-    info = coronavirus_cases()
+    global info
     return render_template("index.html",cases=info["cases"],deaths=info["deaths"])
 
 if __name__ == "__main__":
