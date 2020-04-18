@@ -34,8 +34,12 @@ def coronavirus_cases():
             output += '{} '.format(t)
 
     cases = ""
+    deaths = ""
     state = False
+    state1 = False
     num = 0
+    num1 = 0
+    state2 = False
     for char in output:
         num = num + 1
         if num == 28:
@@ -44,27 +48,23 @@ def coronavirus_cases():
             cases = cases + char
             if char == " ":
                 state = False
-    
-    deaths = ""
-    state = False
-    num = 0
-    for char in output:
-        num = num + 1
-        if num == 48:
-            state = True
-        if state:
+                state1 = True
+        if state1:
+            num1 = num1 + 1
+        if num1 == 12:
+            state2 = True
+        if state2:
             deaths = deaths + char
             if char == " ":
-                state = False
-
-    return {"cases":cases, "deaths":deaths}
+                state2 = False
+    return {"cases":cases, "deaths":deaths, "output":output}
 
 info = coronavirus_cases()
 
 @app.route("/")
 def index():
     global info
-    return render_template("index.html",cases=info["cases"],deaths=info["deaths"])
+    return render_template("index.html", cases=info["cases"],deaths=info["deaths"])
 
 if __name__ == "__main__":
     app.run(port=8000,host="0.0.0.0")
