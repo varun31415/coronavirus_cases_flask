@@ -8,7 +8,7 @@ global info
 
 def coronavirus_cases():
     try:
-        threading.Timer(1.0, coronavirus_cases).start()
+        threading.Timer(4.0, coronavirus_cases).start()
     except: 
         pass
     res = requests.get('https://www.worldometers.info/coronavirus/')
