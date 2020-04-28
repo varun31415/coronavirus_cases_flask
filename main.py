@@ -19,7 +19,7 @@ global info
 
 
 def cases_update_countries():
-    threading.Timer(10.0,cases_update_countries)
+    threading.Timer(60.0,cases_update_countries)
     locations = coronavirus.getLocations(rank_by="confirmed")
     country_names = []
     for location in locations:
@@ -45,7 +45,7 @@ def render_page(template, *args, **kwargs):
     return render_template("base.html", template=template, *args, **kwargs)
 
 def coronavirus_cases():
-    threading.Timer(10.0,coronavirus_cases)
+    threading.Timer(20.0,coronavirus_cases)
     res = requests.get('https://www.worldometers.info/coronavirus/')
     html_page = res.content
     soup = BeautifulSoup(html_page, 'html.parser')

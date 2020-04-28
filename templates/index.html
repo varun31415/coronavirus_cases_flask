@@ -29,7 +29,7 @@
                 window.setInterval(function() {
                     socket.emit("update request",info_updated)
                     console.log("updating request sent")
-                },4000)
+                },20000)
             })
         </script>
         <div id="container" class="container p-3 my-3 bg-dark text-white"><center><h1 id="cases">World Coronavirus Cases: {{ cases }}<h1>
