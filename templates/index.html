@@ -25,6 +25,9 @@
                     $("#cases").innerText = "World Coronavirus cases: " + info.cases
                     console.log("update: cases: "+info.cases+", deaths: "+info.deaths)
                 })
+                socket.on("cases have not changed",function() {
+                    console.log("cases have not changed")
+                })
 
                 window.setInterval(function() {
                     socket.emit("update request",info_updated)
