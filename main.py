@@ -73,10 +73,7 @@ info = coronavirus_cases()
 
 @socket.on("update request")
 def update(info_updated):
-    if info_updated != info: 
-        socket.emit("update",info)
-    else:
-        socket.emit("cases have not changed")
+    socket.emit("update",info)
 
 @app.route("/")
 def index():

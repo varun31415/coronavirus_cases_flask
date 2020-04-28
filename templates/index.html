@@ -25,9 +25,6 @@
                     $("#cases").innerText = "World Coronavirus cases: " + info.cases
                     console.log("update: cases: "+info.cases+", deaths: "+info.deaths)
                 })
-                socket.on("cases have not changed",function() {
-                    console.log("cases have not changed")
-                })
 
                 window.setInterval(function() {
                     socket.emit("update request",info_updated)
@@ -35,7 +32,7 @@
                 },4000)
             })
         </script>
-        <div class="container p-3 my-3 bg-dark text-white"><center><h1 id="cases">World Coronavirus cases: {{ cases }}<h1>
+        <div id="container" class="container p-3 my-3 bg-dark text-white"><center><h1 id="cases">World Coronavirus cases: {{ cases }}<h1>
         <h1 id="deaths">World Coronavirus deaths: {{ deaths }}</h1></center></div>
     </body>
 </html>
