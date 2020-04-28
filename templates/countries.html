@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Coronavirus - countries</title>
+        <style>
+            #country {
+                color:white; 
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            $(document).ready(function() {
+                var socket = io.connect(window.location.href.split('/')[2]);
+            })
+        </script> 
+            <div class="container">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Country</th>
+                  <th>Confirmed Cases</th>
+                  <th>Deaths</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {{code|safe}}
+              </tbody>
+            </table>
+            </div>
+    </body>
+</html>
