@@ -2,10 +2,37 @@
 <html>
     <head>
         <title>Coronavirus cases</title>
+        <style>
+            #coronavirus {
+                color:white; 
+            }
+            #cases {
+                font-size: 50px; 
+            }
+            #deaths {
+                font-size: 50px;
+            }
+        </style>
     </head>
     <body>
-        <span id="cases">Coronavirus cases: {{ cases }}</span>
-        <br>
-        <span id="deaths">Coronavirus deaths: {{ deaths }}</span>
+        <script>
+            $(document).ready(function() {
+                var socket = io.connect(window.location.href.split('/')[2]);
+                var info_updated = {cases:"{{cases}}",deaths:"{{deaths}}"}
+                socket.on("update",function(info) {
+                    info_updated = info
+                    $("#deaths").innerText = "World Coronavirus deaths: " + info.deaths
+                    $("#cases").innerText = "World Coronavirus cases: " + info.cases
+                    console.log("update: cases: "+info.cases+", deaths: "+info.deaths)
+                })
+
+                window.setInterval(function() {
+                    socket.emit("update request",info_updated)
+                    console.log("updating request sent")
+                },4000)
+            })
+        </script>
+        <div class="container p-3 my-3 bg-dark text-white"><center><h1 id="cases">World Coronavirus cases: {{ cases }}<h1>
+        <h1 id="deaths">World Coronavirus deaths: {{ deaths }}</h1></center></div>
     </body>
 </html>

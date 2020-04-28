@@ -1,16 +1,24 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, Response
 import requests
 from bs4 import BeautifulSoup
 import threading
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "2e8fe3d23ehi23e7y"
+#app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://admin:coronavirus@localhost/coronavirus"
+#app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+socket = SocketIO(app)
+#db = SQLAlchemy(app)
+
 global info
 
+def render_page(template, *args, **kwargs):
+    return render_template("base.html", template=template, *args, **kwargs)
+
 def coronavirus_cases():
-    try:
-        threading.Timer(4.0, coronavirus_cases).start()
-    except: 
-        pass
+    global socket
+    threading.Timer(4.0,coronavirus_cases)
     res = requests.get('https://www.worldometers.info/coronavirus/')
     html_page = res.content
     soup = BeautifulSoup(html_page, 'html.parser')
@@ -56,15 +64,25 @@ def coronavirus_cases():
         if state2:
             deaths = deaths + char
             if char == " ":
-                state2 = False
-    return {"cases":cases, "deaths":deaths, "output":output}
+                state2 = False 
+    info = {"cases":cases,"deaths":deaths}
+    return {"cases":cases, "deaths":deaths}
+
 
 info = coronavirus_cases()
 
+@socket.on("update request")
+def update(info_updated):
+    #if info_updated != info: 
+    socket.emit("update",info)
+
 @app.route("/")
 def index():
-    global info
-    return render_template("index.html", cases=info["cases"],deaths=info["deaths"])
+    return render_page("index.html", cases=info["cases"], deaths=info["deaths"])
+
+@app.route("/donate")
+def donater():
+    return render_page("donate.html")
 
 if __name__ == "__main__":
-    app.run(port=8000,host="0.0.0.0")
+    socket.run(app,port=80,host="0.0.0.0")
